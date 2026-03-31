@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pause Coffee Store – Λάρισα</title>
+  <meta name="description" content="Pause Coffee Store στη Λάρισα. Μοντέρνο hub site με κουμπιά που ανοίγουν νέο παράθυρο για μενού, επικοινωνία, χάρτη και delivery." />
+  <meta name="theme-color" content="#0d0f10" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0c0f12;
+      --bg2:#11151a;
+      --card:#171b21;
+      --card2:#1d232a;
+      --line:rgba(255,255,255,.08);
+      --text:#f6f1e8;
+      --muted:rgba(246,241,232,.72);
+      --accent:#d0a76e;
+      --accent2:#8f6339;
+      --shadow:0 18px 50px rgba(0,0,0,.36);
+      --radius:24px;
+      --max:1240px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Manrope,sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(208,167,110,.14), transparent 26%),
+        radial-gradient(circle at 95% 15%, rgba(143,99,57,.12), transparent 24%),
+        linear-gradient(180deg,#090b0d 0%, #101418 100%);
+      color:var(--text);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(100% - 32px,var(--max));margin:0 auto}
+
+    .topbar{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter:blur(18px);
+      background:rgba(9,11,13,.80);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+      padding:16px 0;flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand-mark{
+      width:46px;height:46px;border-radius:15px;overflow:hidden;
+      background:linear-gradient(145deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#161616;font-weight:800;
+      box-shadow:0 12px 24px rgba(208,167,110,.18);flex:0 0 auto
+    }
+    .brand-mark img{width:100%;height:100%;object-fit:cover}
+    .brand-text strong{display:block;font-size:1rem;letter-spacing:-.03em;line-height:1.05}
+    .brand-text span{display:block;font-size:.84rem;color:var(--muted)}
+
+    .nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .nav button,.nav a{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 14px;
+      cursor:pointer;
+      transition:.2s ease;
+      font-weight:700;
+      font-size:.92rem;
+    }
+    .nav button:hover,.nav a:hover{background:rgba(255,255,255,.08);transform:translateY(-1px)}
+
+    .hero{padding:36px 0 18px}
+    .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
+    .hero-main,.hero-side,.panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero-main{
+      position:relative;overflow:hidden;min-height:560px;padding:42px;
+      display:flex;flex-direction:column;justify-content:space-between;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.76)),
+        url('assets/hero.jpg') center/cover;
+    }
+    .hero-main::before{
+      content:"";position:absolute;inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.54)),
+        radial-gradient(circle at 18% 16%, rgba(208,167,110,.16), transparent 24%);
+      pointer-events:none
+    }
+    .hero-content,.hero-bottom{position:relative;z-index:1}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;width:fit-content;
+      padding:8px 14px;border-radius:999px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);
+      color:rgba(255,255,255,.92);font-size:.88rem;margin-bottom:18px
+    }
+    h1{font-size:clamp(2.5rem,5vw,5rem);line-height:.94;letter-spacing:-.07em;max-width:11ch;margin-bottom:18px}
+    .hero p{max-width:62ch;color:rgba(255,255,255,.86);font-size:1.03rem;margin-bottom:26px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:14px 18px;border-radius:999px;border:0;cursor:pointer;
+      font-weight:800;transition:.22s ease;white-space:nowrap
+    }
+    .btn-primary{background:linear-gradient(145deg,var(--accent),#e2c08b);color:#141414}
+    .btn-secondary{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);color:var(--text)}
+    .btn-ghost{background:transparent;border:1px solid rgba(208,167,110,.22);color:var(--text)}
+    .btn:hover{transform:translateY(-2px)}
+
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+    .stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:14px}
+    .stat strong{display:block;font-size:1.08rem;margin-bottom:4px;letter-spacing:-.04em}
+    .stat span{display:block;color:rgba(255,255,255,.74);font-size:.86rem}
+
+    .hero-side{padding:18px;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.05))}
+    .mini-card{border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.04);padding:18px}
+    .mini-card h3{font-size:1.03rem;margin-bottom:8px;letter-spacing:-.03em}
+    .mini-card p{color:var(--muted);font-size:.95rem}
+    .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .tag{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:.84rem;color:rgba(255,255,255,.82)}
+
+    .section{padding:14px 0 24px}
+    .section-header{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:16px}
+    .section-header h2{font-size:clamp(1.5rem,2.6vw,2.1rem);letter-spacing:-.05em;line-height:1}
+    .section-header p{color:var(--muted);max-width:68ch;font-size:.97rem}
+
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:20px;
+      min-height:190px;
+      box-shadow:var(--shadow);
+      transition:.2s ease;
+    }
+    .card:hover{transform:translateY(-3px);border-color:rgba(208,167,110,.24)}
+    .icon{
+      width:46px;height:46px;border-radius:16px;display:grid;place-items:center;margin-bottom:12px;
+      background:linear-gradient(145deg, rgba(208,167,110,.22), rgba(143,99,57,.10));
+      border:1px solid rgba(208,167,110,.14);font-size:1.15rem;overflow:hidden
+    }
+    .icon img{width:100%;height:100%;object-fit:cover}
+    .card h3{font-size:1.06rem;margin-bottom:10px;letter-spacing:-.03em}
+    .card ul{list-style:none;display:grid;gap:8px;color:var(--muted);font-size:.95rem}
+    .price{color:var(--accent);font-weight:800}
+
+    .feature-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+    .photo-panel{min-height:320px;overflow:hidden;position:relative}
+    .photo-panel img{width:100%;height:100%;object-fit:cover;filter:brightness(.82) saturate(.95)}
+    .photo-panel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.48));pointer-events:none}
+    .photo-caption{position:absolute;left:18px;right:18px;bottom:18px;z-index:1}
+    .photo-caption strong{display:block;font-size:1.2rem;margin-bottom:4px}
+    .photo-caption span{color:rgba(255,255,255,.78);font-size:.92rem}
+
+    .delivery-card{
+      display:flex;flex-direction:column;gap:14px;align-items:flex-start;
+      position:relative;overflow:hidden;
+    }
+    .delivery-logo{
+      width:100%;min-height:116px;border-radius:18px;padding:10px;
+      display:grid;place-items:center;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+    }
+    .delivery-logo img{max-height:86px;max-width:100%;object-fit:contain}
+    .box-badge{
+      width:100%;min-height:116px;border-radius:18px;
+      display:grid;place-items:center;
+      background:linear-gradient(145deg,#101418,#1b2127);
+      border:1px solid var(--line);
+      font-weight:900;
+      letter-spacing:.18em;
+      font-size:2rem;
+      color:#ff8c1a;
+    }
+    .delivery-note{color:var(--muted);font-size:.94rem}
+
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .contact-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .social-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+    .social-link{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+    .social-link span{color:var(--muted);font-size:.92rem}
+
+    .faq{display:grid;gap:12px}
+    .faq-item{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);overflow:hidden}
+    .faq-q{width:100%;text-align:left;padding:16px 18px;background:transparent;border:0;color:var(--text);font-weight:800;cursor:pointer;display:flex;justify-content:space-between;gap:12px}
+    .faq-a{display:none;padding:0 18px 16px;color:var(--muted);font-size:.95rem}
+    .faq-item.open .faq-a{display:block}
+
+    .footer{padding:26px 0 36px;border-top:1px solid var(--line);color:var(--muted)}
+    .footer-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+    .footer-links{display:flex;gap:14px;flex-wrap:wrap}
+
+    .assistant-launcher{position:fixed;left:18px;bottom:18px;z-index:40}
+    .assistant-chip{
+      display:inline-flex;gap:10px;align-items:center;cursor:pointer;
+      border:1px solid rgba(208,167,110,.18);background:linear-gradient(145deg, rgba(25,29,33,.96), rgba(16,18,21,.98));
+      border-radius:999px;padding:12px 14px;box-shadow:var(--shadow)
+    }
+    .assistant-dot{width:10px;height:10px;border-radius:50%;background:#83d19a;box-shadow:0 0 0 6px rgba(131,209,154,.12)}
+    .assistant-chip strong{display:block;font-size:.95rem}
+    .assistant-chip span{display:block;color:var(--muted);font-size:.82rem}
+
+    .assistant-box{
+      width:min(390px, calc(100vw - 36px));height:520px;display:none;flex-direction:column;
+      border-radius:22px;overflow:hidden;position:fixed;left:18px;bottom:72px;z-index:50;
+      border:1px solid rgba(255,255,255,.10);background:linear-gradient(180deg, rgba(23,26,29,.98), rgba(16,18,21,.98));
+      box-shadow:0 22px 60px rgba(0,0,0,.42);backdrop-filter:blur(16px)
+    }
+    .assistant-box.open{display:flex}
+    .assistant-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+    .assistant-title{display:flex;align-items:center;gap:10px}
+    .assistant-avatar{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,var(--accent),var(--accent2));color:#111;font-weight:900}
+    .assistant-title strong{display:block;font-size:.98rem}
+    .assistant-title span{display:block;color:var(--muted);font-size:.8rem}
+    .assistant-close{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
+    .assistant-messages{flex:1;overflow-y:auto;padding:14px;display:grid;gap:10px}
+    .msg{max-width:90%;padding:11px 12px;border-radius:16px;border:1px solid var(--line);font-size:.92rem;white-space:pre-wrap}
+    .msg.bot{justify-self:start;background:rgba(255,255,255,.05);border-top-left-radius:6px}
+    .msg.user{justify-self:end;background:linear-gradient(145deg, rgba(208,167,110,.20), rgba(143,99,57,.12));border-top-right-radius:6px}
+    .assistant-quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 14px 12px;border-top:1px solid var(--line);background:rgba(255,255,255,.02)}
+    .quick-btn{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);border-radius:999px;padding:8px 10px;font-size:.84rem;cursor:pointer}
+    .assistant-input{display:flex;gap:10px;padding:12px 12px 14px;border-top:1px solid var(--line);background:rgba(255,255,255,.02)}
+    .assistant-input input{flex:1;border:1px solid var(--line);background:#0f1215;color:var(--text);border-radius:14px;padding:12px 14px;outline:none}
+
+    .popup-overlay{
+      position:fixed;inset:0;background:rgba(6,8,10,.62);display:none;align-items:center;justify-content:center;z-index:80;padding:18px;
+    }
+    .popup-overlay.open{display:flex}
+    .popup-window{
+      width:min(1060px,100%);max-height:92vh;overflow:auto;background:#11151a;border:1px solid var(--line);border-radius:26px;box-shadow:0 30px 80px rgba(0,0,0,.48)
+    }
+    .popup-head{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(17,21,26,.96);backdrop-filter:blur(10px)}
+    .popup-body{padding:20px}
+    .popup-body p,.popup-body li{color:var(--muted)}
+    .popup-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .popup-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .popup-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .line-box{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);padding:16px}
+    .line-row{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .line-row:last-child{border-bottom:0}
+    .line-row strong{font-size:.96rem}
+    .line-row span{color:var(--muted);font-size:.93rem;text-align:right}
+
+    @media (max-width:1080px){
+      .hero-grid,.grid-4,.grid-3,.grid-2,.feature-grid,.contact-grid,.popup-grid,.popup-grid-3,.popup-grid-4{grid-template-columns:1fr}
+      .hero-main{min-height:520px}
+    }
+    @media (max-width:760px){
+      .topbar-inner{align-items:flex-start;flex-direction:column}
+      .nav{justify-content:flex-start}
+      .hero-main{padding:28px}
+      h1{font-size:clamp(2.2rem,9vw,3.8rem)}
+      .stats{grid-template-columns:1fr}
+      .assistant-launcher{left:12px;bottom:12px}
+      .assistant-box{left:12px;bottom:70px;width:calc(100vw - 24px);height:460px}
+      .social-grid{grid-template-columns:1fr}
+      .popup-window{max-height:94vh}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#home" aria-label="Pause Coffee Store">
+        <div class="brand-mark"><img src="assets/logo.jpg" alt="Pause Coffee Store logo"></div>
+        <div class="brand-text">
+          <strong>Pause Coffee Store</strong>
+          <span>Λάρισα · Coffee & More</span>
+        </div>
+      </a>
+
+      <nav class="nav" aria-label="Γρήγορα κουμπιά">
+        <button type="button" onclick="openPopup('Μενού', menuPopup())">Μενού</button>
+        <button type="button" onclick="openPopup('Επικοινωνία', contactPopup())">Επικοινωνία</button>
+        <button type="button" onclick="openPopup('Delivery', deliveryPopup())">Delivery</button>
+        <button type="button" onclick="openPopup('Χάρτης', mapPopup())">Χάρτης</button>
+        <button type="button" onclick="openPopup('FAQ', faqPopup())">FAQ</button>
+        <a href="https://www.instagram.com/pause.coffee.store" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <article class="hero-main">
+          <div class="hero-content">
+            <div class="eyebrow">☕ Καθαρό design · Νέα διάταξη · Νέο παράθυρο</div>
+            <h1>Το Pause Coffee Store σε πιο σύγχρονο hub στυλ.</h1>
+            <p>
+              Τα βασικά κουμπιά ανοίγουν ξεχωριστό παράθυρο, ώστε να μην κάνεις scroll μέσα στη σελίδα. Το site χρησιμοποιεί τις πραγματικές εικόνες που μου έστειλες για logo, εξωτερικό χώρο, coffee cup, e-food και BOX.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" type="button" onclick="openPopup('Μενού', menuPopup())">Άνοιγμα μενού</button>
+              <button class="btn btn-secondary" type="button" onclick="openPopup('Επικοινωνία', contactPopup())">Άνοιγμα επικοινωνίας</button>
+              <button class="btn btn-ghost" type="button" onclick="openPopup('Delivery', deliveryPopup())">Delivery links</button>
+            </div>
+          </div>
+
+          <div class="hero-bottom">
+            <div class="stats">
+              <div class="stat"><strong>Νέος τρόπος πλοήγησης</strong><span>Κάθε κουμπί ανοίγει δικό του παράθυρο</span></div>
+              <div class="stat"><strong>Πιο καθαρό</strong><span>Σκούρα παλέτα και premium εμφάνιση</span></div>
+              <div class="stat"><strong>Πιο χρήσιμο</strong><span>Menu, map, contact, FAQ και assistant</span></div>
+            </div>
+          </div>
+        </article>
+
+        <aside class="hero-side">
+          <div class="mini-card">
+            <h3>Το λογότυπο του καταστήματος</h3>
+            <p>Χρησιμοποιείται κανονικά στο header και σε βασικά σημεία της σελίδας.</p>
+            <div class="tag-row">
+              <span class="tag">Brand</span>
+              <span class="tag">Coffee</span>
+              <span class="tag">Pause</span>
+            </div>
+          </div>
+          <div class="mini-card">
+            <h3>Βασικά στοιχεία</h3>
+            <p>Θεοφράστου 26, Λάρισα · 698 661 4496 · Facebook · Instagram · e-food · BOX</p>
+          </div>
+          <div class="mini-card">
+            <h3>Εξωτερικός χώρος</h3>
+            <p>Η φωτογραφία της πρόσοψης μπαίνει πιο σκούρα και πιο προσεγμένη στην αρχική εικόνα.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-header">
+          <div>
+            <h2>Γρήγορα κουμπιά</h2>
+            <p>Η διάταξη είναι τύπου hub: πατάς και ανοίγει καθαρό περιεχόμενο σε νέο παράθυρο.</p>
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <article class="card">
+            <div class="icon">☕</div>
+            <h3>Μενού</h3>
+            <ul>
+              <li>Καφές, ροφήματα, σνακ</li>
+              <li>Επαγγελματική παρουσίαση</li>
+              <li>Νέο παράθυρο</li>
+            </ul>
+            <div style="height:12px"></div>
+            <button class="btn btn-primary" type="button" onclick="openPopup('Μενού', menuPopup())">Άνοιγμα</button>
+          </article>
+
+          <article class="card">
+            <div class="icon">📞</div>
+            <h3>Επικοινωνία</h3>
+            <ul>
+              <li>Τηλέφωνο</li>
+              <li>Email</li>
+              <li>Social links</li>
+            </ul>
+            <div style="height:12px"></div>
+            <button class="btn btn-primary" type="button" onclick="openPopup('Επικοινωνία', contactPopup())">Άνοιγμα</button>
+          </article>
+
+          <article class="card">
+            <div class="icon">🚚</div>
+            <h3>Delivery</h3>
+            <ul>
+              <li>e-food</li>
+              <li>BOX</li>
+              <li>Wolt removed</li>
+            </ul>
+            <div style="height:12px"></div>
+            <button class="btn btn-primary" type="button" onclick="openPopup('Delivery', deliveryPopup())">Άνοιγμα</button>
+          </article>
+
+          <article class="card">
+            <div class="icon">🗺️</div>
+            <h3>Χάρτης / FAQ</h3>
+            <ul>
+              <li>Google Maps</li>
+              <li>Συχνές ερωτήσεις</li>
+              <li>Νέο παράθυρο</li>
+            </ul>
+            <div style="height:12px"></div>
+            <button class="btn btn-primary" type="button" onclick="openPopup('Χάρτης', mapPopup())">Χάρτης</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-header">
+          <div>
+            <h2>Brand visuals</h2>
+            <p>Το εξωτερικό του καταστήματος, το logo και το coffee cup μπαίνουν ακριβώς εκεί που κάνουν τη μεγαλύτερη δουλειά.</p>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="card photo-panel">
+            <img src="assets/hero.jpg" alt="Pause Coffee Store exterior">
+            <div class="photo-caption">
+              <strong>Το κατάστημα στη Λάρισα</strong>
+              <span>Η φωτογραφία μπαίνει σκοτεινότερη για πιο premium hero εικόνα.</span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="icon"><img src="assets/logo.jpg" alt="Pause logo"></div>
+              <h3>Logo του καταστήματος</h3>
+              <p>Το κανονικό λογότυπο χρησιμοποιείται εδώ για να φαίνεται σωστά και καθαρά.</p>
+            </div>
+            <div class="card">
+              <div class="icon"><img src="assets/mug.jpg" alt="Coffee cup"></div>
+              <h3>Coffee cup visual</h3>
+              <p>Η φωτογραφία του καφέ μπαίνει σε σημείο για αίσθηση ζεστασιάς και premium coffee shop style.</p>
+            </div>
+            <div class="card">
+              <div class="icon">📍</div>
+              <h3>Πληροφορίες</h3>
+              <p>Διεύθυνση, τηλέφωνο, email και social μέσα σε καθαρά κουμπιά και παράθυρα.</p>
+            </div>
+            <div class="card">
+              <div class="icon">⭐</div>
+              <h3>Σύγχρονη διάταξη</h3>
+              <p>Η σελίδα έγινε πιο επαγγελματική, πιο λιτή και πιο εύκολη για κινητό.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-header">
+          <div>
+            <h2>Delivery πλατφόρμες</h2>
+            <p>Χρησιμοποιούνται οι πραγματικές εικόνες που έστειλες για e-food και BOX.</p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="card delivery-card">
+            <div class="delivery-logo">
+              <img src="assets/efood.png" alt="e-food logo">
+            </div>
+            <h3>e-food</h3>
+            <p class="delivery-note">Επίσημη καταχώριση για το Pause Coffee Store στη Λάρισα.</p>
+            <a class="btn btn-primary" href="https://www.e-food.gr/delivery/larisa/pause-coffee-store-7746480" target="_blank" rel="noopener">Άνοιγμα e-food</a>
+          </article>
+
+          <article class="card delivery-card">
+            <div class="delivery-logo">
+              <img src="assets/box.jpg" alt="BOX logo">
+            </div>
+            <h3>BOX</h3>
+            <p class="delivery-note">Το BOX μπαίνει με το πραγματικό logo που έστειλες, σε καθαρή κάρτα.</p>
+            <a class="btn btn-primary" href="https://box.gr/delivery/larisa" target="_blank" rel="noopener">Άνοιγμα BOX</a>
+          </article>
+
+          <article class="card">
+            <div class="icon">⚡</div>
+            <h3>Γρήγορη παραγγελία</h3>
+            <ul>
+              <li>Τηλεφωνική παραγγελία</li>
+              <li>Take away</li>
+              <li>Delivery από πλατφόρμες</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-header">
+          <div>
+            <h2>Σύντομη επαγγελματική παρουσία</h2>
+            <p>Το site δείχνει πιο καθαρό, πιο γρήγορο και πιο premium, χωρίς βαριά κύλιση και χωρίς Wolt.</p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="icon">🎯</div>
+            <h3>Στόχος</h3>
+            <ul>
+              <li>Να βρίσκεις τα πάντα άμεσα</li>
+              <li>Να ανοίγεις κάθε ενότητα σε νέο παράθυρο</li>
+              <li>Να δείχνει επαγγελματικό</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="icon">🧠</div>
+            <h3>Assistant</h3>
+            <ul>
+              <li>Ώρες λειτουργίας</li>
+              <li>Μενού</li>
+              <li>Delivery / social / χάρτης</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="icon">📍</div>
+            <h3>Στοιχεία</h3>
+            <ul>
+              <li>Θεοφράστου 26, Λάρισα</li>
+              <li>698 661 4496</li>
+              <li>pausecoffeestore@gmail.com</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="assistant-launcher">
+    <div class="assistant-chip" id="assistantToggle">
+      <div class="assistant-dot"></div>
+      <div>
+        <strong>Assistant</strong>
+        <span>Ρώτα για μαγαζί, delivery, χάρτη</span>
+      </div>
+    </div>
+
+    <div class="assistant-box" id="assistantBox">
+      <div class="assistant-head">
+        <div class="assistant-title">
+          <div class="assistant-avatar">A</div>
+          <div>
+            <strong>Pause Assistant</strong>
+            <span>Βοηθός καταστήματος</span>
+          </div>
+        </div>
+        <button class="assistant-close" id="assistantClose">✕</button>
+      </div>
+
+      <div class="assistant-messages" id="assistantMessages">
+        <div class="msg bot">Γεια σου! Μπορώ να απαντήσω για ώρες, τηλέφωνο, μενού, Instagram, Facebook, e-food, BOX, χάρτη, email και γενικές πληροφορίες του καταστήματος.</div>
+      </div>
+
+      <div class="assistant-quick">
+        <button class="quick-btn" data-q="Ποιες είναι οι ώρες λειτουργίας;">Ώρες</button>
+        <button class="quick-btn" data-q="Πού βρίσκεται το κατάστημα;">Τοποθεσία</button>
+        <button class="quick-btn" data-q="Τι έχει το μενού;">Μενού</button>
+        <button class="quick-btn" data-q="Έχει Instagram;">Instagram</button>
+        <button class="quick-btn" data-q="Έχει delivery;">Delivery</button>
+      </div>
+
+      <form class="assistant-input" id="assistantForm">
+        <input id="assistantInput" type="text" placeholder="Γράψε εδώ την ερώτησή σου..." autocomplete="off" />
+        <button class="btn btn-primary" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popupOverlay" aria-hidden="true">
+    <div class="popup-window">
+      <div class="popup-head">
+        <div>
+          <strong id="popupTitle" style="display:block;font-size:1.2rem;letter-spacing:-.03em;">Παράθυρο</strong>
+          <span style="color:var(--muted);font-size:.9rem;">Ξεχωριστό παράθυρο περιεχομένου</span>
+        </div>
+        <button class="btn btn-secondary" type="button" onclick="closePopup()">Κλείσιμο</button>
+      </div>
+      <div class="popup-body" id="popupBody"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <strong style="display:block;color:var(--text);margin-bottom:4px;">Pause Coffee Store</strong>
+        <span>Λάρισα · Coffee, Snacks & Daily Pause</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/pause.coffee.store" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/p/Pause-Coffee-Store-61571750416945/" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.e-food.gr/delivery/larisa/pause-coffee-store-7746480" target="_blank" rel="noopener">e-food</a>
+        <a href="https://box.gr/delivery/larisa" target="_blank" rel="noopener">BOX</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const assistantToggle = document.getElementById('assistantToggle');
+    const assistantClose = document.getElementById('assistantClose');
+    const assistantBox = document.getElementById('assistantBox');
+    const assistantForm = document.getElementById('assistantForm');
+    const assistantInput = document.getElementById('assistantInput');
+    const assistantMessages = document.getElementById('assistantMessages');
+    const popupOverlay = document.getElementById('popupOverlay');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupBody = document.getElementById('popupBody');
+
+    assistantToggle.addEventListener('click', () => assistantBox.classList.toggle('open'));
+    assistantClose.addEventListener('click', () => assistantBox.classList.remove('open'));
+
+    function addMsg(text, type='bot'){
+      const el = document.createElement('div');
+      el.className = `msg ${type}`;
+      el.textContent = text;
+      assistantMessages.appendChild(el);
+      assistantMessages.scrollTop = assistantMessages.scrollHeight;
+    }
+
+    const info = {
+      hours: 'Delivery hours from the leaflet: Monday–Saturday 08:00–16:00, Sunday 09:00–13:00. For the store’s main opening hours, use the times you see on the business page.',
+      location: 'Θεοφράστου 26, Λάρισα.',
+      menu: 'Καφέδες, ροφήματα, snacks, pizza, club sandwich, bougatsa, donuts, αναψυκτικά και energy drinks.',
+      instagram: 'pause.coffee.store',
+      delivery: 'Υπάρχουν e-food και BOX. Το Wolt αφαιρέθηκε τελείως όπως ζήτησες.',
+      phone: '698 661 4496',
+      email: 'pausecoffeestore@gmail.com'
+    };
+
+    function answer(q){
+      const t = q.toLowerCase();
+      if (/(ωρ|hours|ανοιχ)/.test(t)) return `Οι delivery ώρες από το φυλλάδιο είναι: ${info.hours}`;
+      if (/(πού|που|τοποθεσ|χάρ|map)/.test(t)) return `Η τοποθεσία είναι ${info.location}`;
+      if (/(μενού|menu|καφέ|snack|σνακ|pizza|club|donut)/.test(t)) return `Το μενού περιλαμβάνει ${info.menu}`;
+      if (/(instagram|ινστα|insta)/.test(t)) return `Το Instagram είναι ${info.instagram}`;
+      if (/(delivery|e-food|box)/.test(t)) return `Για delivery υπάρχουν e-food και BOX. ${info.delivery}`;
+      if (/(τηλέφων|phone|καλέ)/.test(t)) return `Το τηλέφωνο είναι ${info.phone}`;
+      if (/(email|mail)/.test(t)) return `Το email είναι ${info.email}`;
+      return 'Μπορώ να βοηθήσω με ώρες, τοποθεσία, μενού, Instagram, Facebook, e-food, BOX, τηλέφωνο και email.';
+    }
+
+    assistantForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const value = assistantInput.value.trim();
+      if(!value) return;
+      addMsg(value,'user');
+      assistantInput.value='';
+      setTimeout(() => addMsg(answer(value),'bot'), 260);
+    });
+
+    document.querySelectorAll('.quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const q = btn.dataset.q;
+        addMsg(q, 'user');
+        setTimeout(() => addMsg(answer(q), 'bot'), 260);
+      });
+    });
+
+    function openPopup(title, bodyHtml){
+      popupTitle.textContent = title;
+      popupBody.innerHTML = bodyHtml;
+      popupOverlay.classList.add('open');
+      popupOverlay.setAttribute('aria-hidden', 'false');
+    }
+    function closePopup(){
+      popupOverlay.classList.remove('open');
+      popupOverlay.setAttribute('aria-hidden', 'true');
+    }
+    popupOverlay.addEventListener('click', (e) => { if(e.target === popupOverlay) closePopup(); });
+    window.openPopup = openPopup;
+    window.closePopup = closePopup;
+
+    function menuPopup(){
+      return `
+        <div class="popup-grid-4">
+          <div class="card">
+            <div class="icon">☕</div>
+            <h3>Καφέδες</h3>
+            <ul>
+              <li>Espresso <span class="price">2,00€ / 2,30€</span></li>
+              <li>Espresso Macchiato <span class="price">2,00€ / 2,30€</span></li>
+              <li>Cappuccino <span class="price">2,50€ / 2,80€</span></li>
+              <li>Cappuccino Latte <span class="price">2,50€ / 2,80€</span></li>
+              <li>Americano <span class="price">2,00€ / 2,30€</span></li>
+              <li>Nescafé <span class="price">2,20€</span></li>
+              <li>Ελληνικός <span class="price">1,70€</span></li>
+              <li>Φιλτράτος <span class="price">2,50€</span></li>
+              <li>Freddo Espresso <span class="price">2,50€ / 3,00€</span></li>
+              <li>Freddo Cappuccino <span class="price">2,50€ / 3,00€</span></li>
+              <li>Frappe <span class="price">2,20€</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="icon">🥤</div>
+            <h3>Ροφήματα</h3>
+            <ul>
+              <li>Σοκολάτα <span class="price">2,50€</span></li>
+              <li>Φυσικός χυμός <span class="price">1,30€</span></li>
+              <li>Amita <span class="price">1,50€</span></li>
+              <li>Amita Motion <span class="price">2,00€</span></li>
+              <li>Τσάι <span class="price">2,00€</span></li>
+              <li>Powerade <span class="price">2,00€</span></li>
+              <li>Monster Energy <span class="price">2,00€</span></li>
+              <li>Hell 250ml <span class="price">1,00€</span></li>
+              <li>Hell 500ml <span class="price">2,00€</span></li>
+              <li>Red Bull 250ml <span class="price">2,00€</span></li>
+              <li>Νερό 500ml <span class="price">0,50€</span></li>
+              <li>Νερό 1L <span class="price">1,00€</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="icon">🍕</div>
+            <h3>Food / Snacks</h3>
+            <ul>
+              <li>Pizza απλή <span class="price">6,00€</span></li>
+              <li>Pizza κοτόπουλο <span class="price">7,00€</span></li>
+              <li>Κοτομπουκιές <span class="price">6,00€</span></li>
+              <li>Club Sandwich <span class="price">6,00€</span></li>
+              <li>Club Sandwich κοτόπουλο <span class="price">7,00€</span></li>
+              <li>Μπουγάτσα <span class="price">2,20€</span></li>
+              <li>Κουλούρι τυρί <span class="price">2,00€</span></li>
+              <li>Κουλούρι ανώσυρτο και γαλοπούλα <span class="price">2,20€</span></li>
+              <li>Τυρόπιτα <span class="price">2,00€</span></li>
+              <li>Σπανακόπιτα <span class="price">2,20€</span></li>
+              <li>Πίτα <span class="price">2,00€</span></li>
+              <li>Κουλούρι Θεσσαλονίκης <span class="price">0,70€</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="icon">🍩</div>
+            <h3>Γλυκά / Σνακ</h3>
+            <ul>
+              <li>Donut μεγάλο <span class="price">1,60€</span></li>
+              <li>Donut γεμιστό μεσαίο <span class="price">1,00€</span></li>
+              <li>Donut γεμιστό μικρό <span class="price">0,70€</span></li>
+              <li>Μπύρα κουτάκι 330ml <span class="price">1,50€</span></li>
+              <li>Μπύρα κουτάκι 500ml <span class="price">2,00€</span></li>
+              <li>Μπύρα μπουκάλι 500ml <span class="price">4,00€</span></li>
+              <li>Κρασί 330ml <span class="price">3,00€</span></li>
+            </ul>
+          </div>
+        </div>
+        <div style="height:16px"></div>
+        <div class="line-box">
+          <strong style="display:block;margin-bottom:8px">Σημείωση</strong>
+          <p>Από το φυλλάδιο προκύπτει επίσης ότι οι delivery ώρες είναι Δευτέρα–Σάββατο 08:00–16:00 και Κυριακή 09:00–13:00. Αν θέλεις, μπορώ να προσθέσω και ξεχωριστή σελίδα μόνο για κατάλογο.</p>
+        </div>
+      `;
+    }
+
+    function contactPopup(){
+      return `
+        <div class="popup-grid">
+          <div class="card">
+            <div class="icon">📍</div>
+            <h3>Στοιχεία καταστήματος</h3>
+            <ul>
+              <li><strong>Διεύθυνση:</strong> Θεοφράστου 26, Λάρισα</li>
+              <li><strong>Τηλέφωνο:</strong> 698 661 4496</li>
+              <li><strong>Email:</strong> pausecoffeestore@gmail.com</li>
+            </ul>
+            <div class="contact-actions">
+              <a class="btn btn-primary" href="tel:+306986614496" target="_blank" rel="noopener">Κλήση</a>
+              <a class="btn btn-secondary" href="mailto:pausecoffeestore@gmail.com" target="_blank" rel="noopener">Email</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="icon">🌐</div>
+            <h3>Social</h3>
+            <div class="social-grid">
+              <a class="social-link" href="https://www.facebook.com/p/Pause-Coffee-Store-61571750416945/" target="_blank" rel="noopener"><strong>Facebook</strong><span>Άνοιγμα</span></a>
+              <a class="social-link" href="https://www.instagram.com/pause.coffee.store" target="_blank" rel="noopener"><strong>Instagram</strong><span>Άνοιγμα</span></a>
+            </div>
+            <div style="height:12px"></div>
+            <p>Το Instagram του καταστήματος είναι το <strong>pause.coffee.store</strong>.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function deliveryPopup(){
+      return `
+        <div class="popup-grid">
+          <div class="card delivery-card">
+            <div class="delivery-logo">
+              <img src="assets/efood.png" alt="e-food logo">
+            </div>
+            <h3>e-food</h3>
+            <p class="delivery-note">Η επίσημη καταχώριση του καταστήματος στο e-food.</p>
+            <a class="btn btn-primary" href="https://www.e-food.gr/delivery/larisa/pause-coffee-store-7746480" target="_blank" rel="noopener">Άνοιγμα e-food</a>
+          </div>
+          <div class="card delivery-card">
+            <div class="delivery-logo">
+              <img src="assets/box.jpg" alt="BOX logo">
+            </div>
+            <h3>BOX</h3>
+            <p class="delivery-note">Το πραγματικό logo BOX που έστειλες τοποθετείται εδώ καθαρά και σωστά.</p>
+            <a class="btn btn-primary" href="https://box.gr/delivery/larisa" target="_blank" rel="noopener">Άνοιγμα BOX</a>
+          </div>
+        </div>
+      `;
+    }
+
+    function mapPopup(){
+      return `
+        <div class="popup-grid">
+          <div class="card">
+            <div class="icon">🗺️</div>
+            <h3>Τοποθεσία</h3>
+            <p>Θεοφράστου 26, Λάρισα</p>
+            <div style="height:12px"></div>
+            <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=Pause+Coffee+Store+Larisa" target="_blank" rel="noopener">Άνοιγμα σε Google Maps</a>
+          </div>
+          <div class="card">
+            <div class="icon">🕒</div>
+            <h3>Ώρες λειτουργίας</h3>
+            <div class="line-box">
+              <div class="line-row"><strong>Δευτέρα - Πέμπτη</strong><span>07:00 - 22:00</span></div>
+              <div class="line-row"><strong>Παρασκευή</strong><span>07:00 - 22:30</span></div>
+              <div class="line-row"><strong>Σάββατο</strong><span>08:00 - 22:30</span></div>
+              <div class="line-row"><strong>Κυριακή</strong><span>08:00 - 21:30</span></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function faqPopup(){
+      return `
+        <div class="faq">
+          <div class="faq-item"><button class="faq-q" type="button">Υπάρχει delivery; <span>+</span></button><div class="faq-a">Ναι, υπάρχουν e-food και BOX. Το Wolt έχει αφαιρεθεί τελείως.</div></div>
+          <div class="faq-item"><button class="faq-q" type="button">Πού βρίσκεται το μαγαζί; <span>+</span></button><div class="faq-a">Στη Θεοφράστου 26, Λάρισα.</div></div>
+          <div class="faq-item"><button class="faq-q" type="button">Έχει Instagram; <span>+</span></button><div class="faq-a">Ναι, το επίσημο προφίλ είναι pause.coffee.store.</div></div>
+          <div class="faq-item"><button class="faq-q" type="button">Τι περιλαμβάνει ο κατάλογος; <span>+</span></button><div class="faq-a">Καφέδες, ροφήματα, pizza, club sandwich, μπουγάτσα, donuts, αναψυκτικά και energy drinks.</div></div>
+        </div>
+      `;
+    }
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('faq-q')) {
+        const item = e.target.parentElement;
+        item.classList.toggle('open');
+        const s = e.target.querySelector('span');
+        s.textContent = item.classList.contains('open') ? '−' : '+';
+      }
+    });
+  </script>
+</body>
+</html>
